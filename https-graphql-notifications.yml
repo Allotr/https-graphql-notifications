@@ -1,0 +1,9 @@
+version: 1.0
+provider:
+  name: openfaas
+  gateway: https://openfaas.allotr.eu
+functions:
+  https-graphql-notifications:
+    lang: node-typescript-express
+    handler: ./https-graphql-notifications
+    image: rafaelpernil/https-graphql-notifications:latest
