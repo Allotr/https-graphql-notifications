@@ -4,6 +4,6 @@ provider:
   gateway: https://openfaas.allotr.eu
 functions:
   https-graphql-notifications:
-    lang: node-typescript-express
+    lang: node-typescript-uwebsockets
     handler: ./https-graphql-notifications
     image: rafaelpernil/https-graphql-notifications:latest
