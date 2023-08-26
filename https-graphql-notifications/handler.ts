@@ -28,7 +28,7 @@ function onServerCreated(app: TemplatedApp) {
     schema,
     context: async ({ req, res, request, params }) => {
       // Context factory gets called for every request
-      const [sid,userId] = await getUserInfoFromRequest(request, params);
+      const [sid, userId] = await getUserInfoFromRequest(request, params);
       return {
         req,
         res,
@@ -48,10 +48,9 @@ function onServerCreated(app: TemplatedApp) {
       useGraphQlJit(),
       useParserCache(),
       useResponseCache({
-        session: (request) => {
-          const cookieList = request.headers.get('cookie') ?? "";
-          const parsedCookie = cookie.parse(cookieList);
-          return parsedCookie?.['connect.sid'];
+        // cache based on the authorization header
+        session: request => {
+          return request.headers.get('authorization')
         },
         cache
       })
