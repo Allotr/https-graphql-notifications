@@ -1,16 +1,19 @@
 
 import { Resolvers, TicketStatusCode, ResourceNotification, ResourceNotificationDbObject } from "allotr-graphql-schema-types";
-import { NOTIFICATIONS } from "../../consts/collections";
-import { GraphQLContext } from "../../types/yoga-context";
+import { NOTIFICATIONS } from "../consts/collections";
+import { GraphQLContext } from "../types/yoga-context";
+import { getTargetUserId } from "../guards/guards";
 
 
 export const NotificationResolvers: Resolvers = {
     Query: {
         myNotificationData: async (parent, args, context: GraphQLContext) => {
+            const { userId: targetUserId } = args;
+            const userId = getTargetUserId(context.user, targetUserId);
             const db = await (await context.mongoDBConnection).db;
 
             const userNotifications = await db.collection<ResourceNotificationDbObject>(NOTIFICATIONS).find({
-                "user._id": context.user._id
+                "user._id": userId
             }).sort({
                 timestamp: -1
             }).toArray();
